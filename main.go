@@ -9,10 +9,11 @@ import (
 )
 
 // application details injected at build time
-var AppName string = "my-app" // pretty-formatted
+var AppName string = "app" // pretty-formatted
 var AppBuildType string = "unreleased/internal"
 var AppBuildDate string = time.Now().Format("02 Jan 2006 15:04:05") // equals to date '+%c'
 var AppSemVersion, GitCommit string
+var AppCopyrightText string
 
 // application behaviour
 var appVerboseMode bool = false

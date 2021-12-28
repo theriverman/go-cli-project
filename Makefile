@@ -4,10 +4,6 @@ BINARY_NAME := MY-CLI-APPLICATION
 COPYRIGHT_TEXT := MY-CUSTOM-COPYRIGHT-TEXT | All Rights Reserved 2021 - $(shell date '+%Y')
 BUILD_TIME := $(shell date '+%c')
 
-# TECHNICAL VARS
-GO_LD_FLAGS := -ldflags "-X 'main.AppName=$(AppName)' -X 'main.AppBuildDate=$(BUILD_TIME)' -X 'main.AppBuildType=$(BUILD_TYPE)' -X 'main.AppSemVersion=$(LATEST_GIT_TAG)' -X 'main.GitCommit=$(LATEST_GIT_COMMIT)'"
-export PATH := $(shell go env GOPATH)/bin:$(PATH)
-
 # Configure OS-specific binary suffix
 ifeq ($(OS),Windows_NT)
 	BINARY_SUFFIX := .exe
@@ -35,6 +31,10 @@ ifndef LATEST_GIT_COMMIT
 	LATEST_GIT_COMMIT := commit-id-could-not-be-retrieved
 endif
 
+# TECHNICAL VARS
+GO_LD_FLAGS := -ldflags "-X 'main.AppName=$(AppName)' -X 'main.AppBuildDate=$(BUILD_TIME)' -X 'main.AppBuildType=$(BUILD_TYPE)' -X 'main.AppCopyrightText=$(COPYRIGHT_TEXT)' -X 'main.AppSemVersion=$(LATEST_GIT_TAG)' -X 'main.GitCommit=$(LATEST_GIT_COMMIT)'"
+export PATH := $(shell go env GOPATH)/bin:$(PATH)
+
 # **MAKE TARGETS**
 info:
 	@echo "Choose from the following targets:"
@@ -47,6 +47,8 @@ info:
 
 build:
 	@echo "Building for host system: $(shell go env GOOS)/$(shell go env GOARCH)"
+	$(eval BUILD_TYPE := internal/verification)
+	$(eval GO_LD_FLAGS := -ldflags "-X 'main.AppName=$(AppName)' -X 'main.AppBuildDate=$(BUILD_TIME)' -X 'main.AppBuildType=$(BUILD_TYPE)' -X 'main.AppCopyrightText=$(COPYRIGHT_TEXT)' -X 'main.AppSemVersion=$(LATEST_GIT_TAG)' -X 'main.GitCommit=$(LATEST_GIT_COMMIT)'")
 	@go build $(GO_LD_FLAGS) -o dist/$(BINARY_NAME)$(BINARY_SUFFIX)
 
 build-darwin:
