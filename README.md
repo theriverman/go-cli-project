@@ -108,5 +108,21 @@ echo "go.mod" >> .git/info/exclude
 echo "go.sum" >> .git/info/exclude
 ```
 
+## Roadmap
+- [x] Files for demonstrating a project layout
+- [x] Windows Version Information support
+  - [x] versioninfo.json
+  - [x] make target: generate-win-versioninfo
+  - [ ] custom icon for the binary output
+- [ ] Tests
+  - [ ] unit test cases
+  - [ ] make target: test 
+  - [ ] make target: lint
+- [ ] Project initialisation script
+  - [ ] remove template-specific contents from README.md
+  - [ ] create go.mod and go.sum based on username/project path
+  - [ ] make all steps skippable
+  - [ ] verify project LICENSE file contents
+
 # Acknowledgements
   * github.com/josephspurrier/goversioninfo
