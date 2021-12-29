@@ -54,5 +54,59 @@ $ tree ./go-cli-app-template
 └── versioninfo.json  # executable file details (Windows-only)
 ```
 
+# Building the Project
+The recommended approach to building the project is using [Make](https://en.wikipedia.org/wiki/Make_(software)).
+
+Typical build targets defined in `Makefile` are the following:
+  * **build**: builds the project for your system's OS/Architecture. the output file is `./dist/$(BINARY_NAME)$(BINARY_SUFFIX)`
+  * **build-darwin**:   builds the project for Darwin/MacOS targeting amd64 and arm64
+  * **build-linux**:    builds the project for Linux targeting 386/amd64/arm/arm64
+  * **build-windows**:  builds the project for Windows targeting 386/amd64
+  * **build-all**:      builds the project for all above declared targets
+  * **clean**:          removes all built binaries and build artefacts
+
+Additionally a demonstration-only target called `build-enterprise-linux` is also present in the template's Makefile to propagate the conditional compilation possibilities of Go using [Build Tags](https://www.digitalocean.com/community/tutorials/customizing-go-binaries-with-build-tags).
+
+These targets can be fully customised depending on the needs of your project.
+
+# A Complete CLI Application
+An project (called **SOCKS5 CLI**) built using this template results in a CLI application similar to below:
+```txt
+./wintersocks5.armon-windows-amd64.exe --help
+
+NAME:
+   SOCKS5 CLI - SOCKS5 CLI | A tiny CLI wrapper around github.com/theriverman/go-socks5 (forked from github.com/armon/go-socks5)
+
+USAGE:
+   wintersocks5.armon-windows-amd64.exe [global options] command [command options] [arguments...]
+
+VERSION:
+   3.0.2
+
+COMMANDS:
+   server   Starts the SOCKS5 server
+   version  Show the SOCKS5 CLI version information (detailed)
+   help, h  Shows a list of commands or help for one command
+
+GLOBAL OPTIONS:
+   --verbose      Runs the application in verbose mode (default: false)
+   --help, -h     show help (default: false)
+   --version, -V  Prints version information of go-socks5-cli and quit (default: false)
+
+COPYRIGHT:
+   SOCKS5 CLI | MIT License | All Rights Reserved 2021 - 2022
+```
+
+Windows binaries will be extended with [Version Information](https://docs.microsoft.com/en-gb/windows/win32/menurc/version-information) based on the contents of [versioninfo.json](./versioninfo.json), and the state of the Git repository (last commit hash & latest tag).
+
+![Version Information of Windows Binaries](./.github/images/win-version-info.png)
+
+# Contribution
+Fork the repository, then add `go.mod` and `go.sum` to `.git/info/exclude` to avoid adding these files to the project via the template:
+```bash
+echo "go.mod" >> .git/info/exclude
+echo "go.sum" >> .git/info/exclude
+```
+
 # Acknowledgements
   * github.com/josephspurrier/goversioninfo
