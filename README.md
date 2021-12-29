@@ -1,5 +1,5 @@
-# go-cli-app-template
-Go CLI Application Template
+# Go CLI Project
+A template repositry for creating unified CLI applications in Go.
 
 # Introduction
 This template implies the following conditions:
