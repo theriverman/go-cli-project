@@ -13,19 +13,22 @@ All subsequent or lower-level commands are defined in cli.commands.go file.
 Refer to the documentation of urfave/cli at https://github.com/urfave/cli
 */
 
+// application behaviour
+var appVerboseMode bool = false
+
 // NewCLIApplication returns a *cli.App pointer which is the primary entrypoint to our CLI application.
 // NewCLIApplication is the first call from main().
-func NewCLIApplication() (app *cli.App) {
-	app = &cli.App{
+func NewCLIApplication() *cli.App {
+	return &cli.App{
 		Name:    AppName,
-		Usage:   "The purpose of My App is not explained here yet",
+		Usage:   fmt.Sprintf("The purpose of %s is not explained here yet", AppName),
 		Version: AppSemVersion,
 		// application-level flags can be define below. these are applicable during the whole runtime
 		Flags: []cli.Flag{
 			&cli.BoolFlag{
 				Name:        "verbose",
 				Destination: &appVerboseMode,
-				Usage:       "Runs the application in verbose mode",
+				Usage:       fmt.Sprintf("Runs %s in verbose mode", AppName),
 			},
 		},
 		Before: func(c *cli.Context) error {
@@ -42,6 +45,6 @@ func NewCLIApplication() (app *cli.App) {
 		},
 		Commands:  getApplicationCommands(),
 		Copyright: AppCopyrightText,
+		// see the urfave/cli documentation for all possible options: https://github.com/urfave/cli/blob/master/docs/v2/manual.md
 	}
-	return
 }

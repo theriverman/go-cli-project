@@ -9,16 +9,17 @@ import (
 )
 
 // application details injected at build time
-var AppName string = "app" // pretty-formatted
-var AppBuildType string = "unreleased/internal"
-var AppBuildDate string = time.Now().Format("02 Jan 2006 15:04:05") // equals to date '+%c'
-var AppSemVersion, GitCommit string
-var AppCopyrightText string
-
-// application behaviour
-var appVerboseMode bool = false
+var (
+	AppName          string = "app" // pretty-formatted
+	AppBuildType     string = "unreleased/internal"
+	AppBuildDate     string = time.Now().Format("02 Jan 2006 15:04:05") // equals to date '+%c'
+	AppSemVersion    string = "no-version"
+	AppCopyrightText string = "no copyright"
+	GitCommit        string = "commit-id-could-not-be-retrieved"
+)
 
 func main() {
+	// if you're using the template as intended, this main() function shouldn't be modified at all
 	cli.VersionFlag = &cli.BoolFlag{
 		Name:    "version",
 		Aliases: []string{"V"},
@@ -30,5 +31,4 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
 }

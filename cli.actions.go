@@ -1,5 +1,10 @@
 package main
 
+/*
+	The application's business logic shall be implemented here in cli.actions.go in a function similar to `actionGreet` and `actionVersion` below.
+	They must be added as a parameter in cli.commands.go where all possible application commands are defined.
+*/
+
 import (
 	"fmt"
 	"runtime"
