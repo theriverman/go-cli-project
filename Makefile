@@ -44,6 +44,7 @@ info:
 	@echo "  * build-windows"
 	@echo "    -----------------------------------------------"
 	@echo "  * build-all"
+	@echo "  * create-tar"
 
 build:
 	@echo "Building for host system: $(shell go env GOOS)/$(shell go env GOARCH)"
@@ -77,3 +78,8 @@ clean:
 generate-win-versioninfo:
 	@go install github.com/josephspurrier/goversioninfo/cmd/goversioninfo@latest
 	goversioninfo -platform-specific=true -file-version "$(LATEST_GIT_TAG).0" -product-version "$(LATEST_GIT_TAG)" -copyright "$(COPYRIGHT_TEXT)" -private-build "$(LATEST_GIT_TAG)" 
+
+create-tar:
+	@echo "Adding new binaries to a tar.gz archive in ./dist"
+	@tar -czvf ./$(BINARY_NAME).tar.gz -C ./dist .
+	@mv ./$(BINARY_NAME).tar.gz ./dist/
