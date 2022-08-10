@@ -1,5 +1,5 @@
 # GENERAL
-AppName := My CLI Application
+AppName := My CLI Application's Name
 BINARY_NAME := MY-CLI-APPLICATION
 COPYRIGHT_TEXT := MY-CUSTOM-COPYRIGHT-TEXT | All Rights Reserved 2021 - $(shell date '+%Y')
 BUILD_TIME := $(shell date '+%c')
@@ -69,7 +69,7 @@ build-windows: generate-win-versioninfo
 build-enterprise-linux:
 	@GOOS=linux GOARCH=amd64 go build $(GO_LD_FLAGS) --tags enterprise -o dist/$(BINARY_NAME).enterprise-linux-amd64
 
-build-all: clean build-darwin build-linux build-windows
+build-all: clean build-darwin build-linux build-windows build-enterprise-linux
 
 clean:
 	rm -rf ./dist/*
