@@ -8,7 +8,7 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-// application details injected at build time
+// application details injected at build time. see Makefile for more details
 var (
 	AppName          string = ""
 	AppBuildDate     string = ""
@@ -26,14 +26,19 @@ var appVerboseMode bool = false
 var greetNameValue string
 var greetAskMeValue bool
 
-// NewApplication is the primary entrypoint to our CLI application. the base logic shall be implemented here
-func NewApplication() *cli.App {
-	return &cli.App{
+func main() {
+	cli.VersionFlag = &cli.BoolFlag{
+		Name:    "version",
+		Aliases: []string{"V"},
+		Usage:   fmt.Sprintf("Prints version information about %s", AppName),
+	}
+
+	app := &cli.App{
 		Name:    AppName,
 		Usage:   fmt.Sprintf("The purpose of %s is not explained here yet", AppName),
 		Version: AppSemVersion,
-		// application-level flags can be define below. these are applicable during the whole runtime
 		Flags: []cli.Flag{
+			// application-level flags
 			&cli.BoolFlag{
 				Name:        "verbose",
 				Destination: &appVerboseMode,
@@ -41,19 +46,19 @@ func NewApplication() *cli.App {
 			},
 		},
 		Before: func(c *cli.Context) error {
-			// CLI flags are processed at this point. Consider configuring your logging level
+			// application-level flags are processed at this point. consider configuring your app-level things in the Before flag, such as, logging
 			if appVerboseMode {
 				fmt.Println("Verbose mode has been enabled")
 			}
 			return nil
 		},
 		Action: func(c *cli.Context) error {
-			// remove this action block if you want to show the help when the
-			// binary gets executed without any arguments
+			// this is the default action when executed w/o additional commands
+			// remove this action block if you want to show the default help text
 			return nil
 		},
 		Commands: []*cli.Command{
-			// your custom application commands can be added here
+			// application commands can be added here
 			// see command `greet` below for a demonstration
 			{
 				Name:   "greet",
@@ -85,17 +90,6 @@ func NewApplication() *cli.App {
 		Copyright: AppCopyrightText,
 		// see the urfave/cli documentation for all possible options: https://github.com/urfave/cli/blob/master/docs/v2/manual.md
 	}
-}
-
-func main() {
-	// if you're using the template as intended, this main() function shouldn't be modified at all
-	cli.VersionFlag = &cli.BoolFlag{
-		Name:    "version",
-		Aliases: []string{"V"},
-		Usage:   "Prints version information of go-socks5-cli and quit",
-	}
-
-	app := NewApplication()
 	err := app.Run(os.Args)
 	if err != nil {
 		log.Fatal(err)
