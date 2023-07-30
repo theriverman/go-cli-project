@@ -39,12 +39,12 @@ export PATH := $(shell go env GOPATH)/bin:$(PATH)
 info:
 	@echo "Choose from the following targets:"
 	@echo "  * build (defaults to your host/OS settings)"
-	@echo "  * build-darwin"
-	@echo "  * build-linux"
-	@echo "  * build-windows"
+	@echo "  * darwin"
+	@echo "  * linux"
+	@echo "  * windows"
 	@echo "    -----------------------------------------------"
-	@echo "  * build-all"
-	@echo "  * create-tar"
+	@echo "  * dist"	
+	@echo "  * all"
 
 build:
 	@echo "Building for host system: $(shell go env GOOS)/$(shell go env GOARCH)"
@@ -52,24 +52,21 @@ build:
 	$(eval GO_LD_FLAGS := -ldflags "-X 'main.AppName=$(AppName)' -X 'main.AppBuildDate=$(BUILD_TIME)' -X 'main.AppBuildType=$(BUILD_TYPE)' -X 'main.AppCopyrightText=$(COPYRIGHT_TEXT)' -X 'main.AppSemVersion=$(LATEST_GIT_TAG)' -X 'main.GitCommit=$(LATEST_GIT_COMMIT)'")
 	@go build $(GO_LD_FLAGS) -o dist/$(BINARY_NAME)$(BINARY_SUFFIX)
 
-build-darwin:
+darwin:
 	@GOOS=darwin GOARCH=amd64 go build $(GO_LD_FLAGS) -o dist/$(BINARY_NAME)-darwin-amd64
 	@GOOS=darwin GOARCH=arm64 go build $(GO_LD_FLAGS) -o dist/$(BINARY_NAME)-darwin-arm64
 
-build-linux:
+linux:
 	@GOOS=linux GOARCH=386 go build $(GO_LD_FLAGS) -o dist/$(BINARY_NAME)-linux-386
 	@GOOS=linux GOARCH=amd64 go build $(GO_LD_FLAGS) -o dist/$(BINARY_NAME)-linux-amd64
 	@GOOS=linux GOARCH=arm go build $(GO_LD_FLAGS) -o dist/$(BINARY_NAME)-linux-arm
 	@GOOS=linux GOARCH=arm64 go build $(GO_LD_FLAGS) -o dist/$(BINARY_NAME)-linux-arm64
 
-build-windows: generate-win-versioninfo
+windows: generate-win-versioninfo
 	@GOOS=windows GOARCH=386 go build $(GO_LD_FLAGS) -o dist/$(BINARY_NAME)-windows-386.exe
 	@GOOS=windows GOARCH=amd64 go build $(GO_LD_FLAGS) -o dist/$(BINARY_NAME)-windows-amd64.exe
 
-build-enterprise-linux:
-	@GOOS=linux GOARCH=amd64 go build $(GO_LD_FLAGS) --tags enterprise -o dist/$(BINARY_NAME).enterprise-linux-amd64
-
-build-all: clean build-darwin build-linux build-windows build-enterprise-linux
+all: clean darwin linux windows dist
 
 clean:
 	rm -rf ./dist/*
@@ -79,7 +76,7 @@ generate-win-versioninfo:
 	@go install github.com/josephspurrier/goversioninfo/cmd/goversioninfo@latest
 	goversioninfo -platform-specific=true -file-version "$(LATEST_GIT_TAG).0" -product-version "$(LATEST_GIT_TAG)" -copyright "$(COPYRIGHT_TEXT)" -private-build "$(LATEST_GIT_TAG)" 
 
-create-tar:
+dist:
 	@echo "Adding new binaries to a tar.gz archive in ./dist"
 	@tar -czvf ./$(BINARY_NAME).tar.gz -C ./dist .
 	@mv ./$(BINARY_NAME).tar.gz ./dist/
