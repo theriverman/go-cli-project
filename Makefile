@@ -20,7 +20,7 @@ else
 endif
 
 # Get/Set LATEST_GIT_TAG
-LATEST_GIT_TAG := $(shell git describe --tags --abbrev=0)
+LATEST_GIT_TAG := $(shell git describe --tags --abbrev=0 --always)
 ifndef LATEST_GIT_TAG
 	LATEST_GIT_TAG := no-version
 endif
